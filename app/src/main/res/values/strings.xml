@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">BluetoothPack</string>
+    <string name="discoverable">visible</string>
+    <string name="on_off">on/off</string>
+    <string name="find">find</string>
+    <string name="close_connection">close</string>
+    <string name="enter_text_here">enter text here</string>
+    <string name="send">SEND</string>
+    <string name="device_name">device name</string>
+    <string name="device_adress">device address</string>
+</resources>
