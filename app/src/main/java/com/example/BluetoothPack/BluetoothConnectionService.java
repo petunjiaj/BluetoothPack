@@ -53,25 +53,25 @@ class BluetoothConnectionService {
     // local variables:
     private final BluetoothAdapter mBluetoothAdapter;
     private Context mContext;
-    private ProgressDialog mProgressDialog;
+    private ProgressDialog mProgressDialog;     // starting connection progress-bar
     // threads:
     private AcceptThread mInsecureAcceptThread; // listens for incoming connections (server-socket)
-    private ConnectThread mConnectThread;       //
-    private ConnectedThread mConnectedThread;
+    private ConnectThread mConnectThread;       // start client connection
+    private ConnectedThread mConnectedThread;   // manage active connection (input-output)
     // other device parameters:
-    private BluetoothDevice mmDevice;
-    private IncomingMsgHandler incomingMsgHandler;
+    private BluetoothDevice mmDevice;               // other device
+    private IncomingMsgHandler incomingMsgHandler;  // incoming messages updater (for UI listener)
 
     // constructor:
     BluetoothConnectionService(Context mContext, IncomingMsgHandler handler) {
         this.mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         this.mContext = mContext;
         incomingMsgHandler = handler;
-        // start AcceptThread mode (listening as Server for incoming connections):
-        start();
+        startServer(); // start AcceptThread mode (listening as Server for incoming connections):
     }
+
     // Start the chat service (AcceptThread) to begin a session in server-mode (listening):
-    private synchronized void start(){
+    private synchronized void startServer(){
         Log.d(TAG, "start.");
         if(mConnectThread!=null){       // if there is already a connectThread
             mConnectThread.cancel();    // cancel it
@@ -82,6 +82,7 @@ class BluetoothConnectionService {
             mInsecureAcceptThread.start();              // start acceptThread.
         }
     }
+
     // Start a connection (connectThread) with the other devices AcceptThread (client-mode):
     void startClient(BluetoothDevice device){
         Log.d(TAG, "startClient - started.");
