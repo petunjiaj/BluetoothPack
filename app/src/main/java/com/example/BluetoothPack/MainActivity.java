@@ -25,7 +25,7 @@ import androidx.core.app.ActivityCompat;
  *    - TextView: get incoming messages to other device.
  */
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, IncomingMsgHandler.OnMessageReceivedListener{
     private static final String TAG = "MainActivity";
     ListView listfoundDevices;
     EditText sendText;
@@ -64,13 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listfoundDevices.setOnItemClickListener(this);
 
         // new handler for incoming messages (with listener-interface):
-        handler = new IncomingMsgHandler(new IncomingMsgHandler.OnMessageReceivedListener() {
-            @Override
-            public void handleMessage(final String message) {
-                Log.d(TAG, "handled message: " + message);
-                receiveText.setText(message);
-            }
-        });
+        handler = new IncomingMsgHandler(this);
         btHelper = new BluetoothHelper(this, handler);      // set new BluetoothHelper
         listfoundDevices.setAdapter(btHelper.mDeviceListAdapter);   // set adapter for list-view:
     }
@@ -113,5 +107,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
         btHelper.unregister();
         handler.clear();
+    }
+
+    @Override
+    public void handleMessage(String message) {
+        Log.d(TAG, "handled message: " + message);
+        receiveText.setText(message);
     }
 }
